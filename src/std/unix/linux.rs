@@ -149,7 +149,7 @@ fn ifreq_ioctl(
 ) -> io::Result<libc::c_int> {
     unsafe {
         #[allow(trivial_casts)]
-        let res = libc::ioctl(lower, cmd, ifreq as *mut ifreq);
+        let res = libc::ioctl(lower, cmd.try_into().unwrap(), ifreq as *mut ifreq);
 
         if res == -1 {
             return Err(io::Error::last_os_error());
