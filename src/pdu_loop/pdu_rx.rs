@@ -26,7 +26,7 @@ impl<'sto> PduRx<'sto> {
     ///
     /// This is required on macOS (and BSD I believe) as the interface's MAC address cannot be
     /// overridden at the packet level for some reason.
-    #[cfg(all(not(target_os = "linux"), unix))]
+    #[cfg(all(not(any(target_os = "linux", target_os = "android")), unix))]
     pub(crate) fn set_source_mac(&mut self, new: EthernetAddress) {
         self.source_mac = new
     }

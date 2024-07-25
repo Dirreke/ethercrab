@@ -1,13 +1,13 @@
 //! Items to use when not in `no_std` environments.
 
-#[cfg(all(not(target_os = "linux"), unix))]
+#[cfg(all(not(any(target_os = "linux", target_os = "android")), unix))]
 mod bpf;
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "android"))]
 mod linux;
 
-#[cfg(all(not(target_os = "linux"), unix))]
+#[cfg(all(not(any(target_os = "linux", target_os = "android")), unix))]
 use self::bpf::BpfDevice as RawSocketDesc;
-#[cfg(target_os = "linux")]
+#[cfg(any(target_os = "linux", target_os = "android"))]
 pub(in crate::std) use self::linux::RawSocketDesc;
 
 use crate::{
@@ -116,7 +116,7 @@ pub fn tx_rx_task<'sto>(
 
     // macOS forcibly sets the source address to the NIC's MAC, so instead of using `MASTER_ADDR`
     // for filtering returned packets, we must set the address to compare to the NIC MAC.
-    #[cfg(all(not(target_os = "linux"), unix))]
+    #[cfg(all(not(any(target_os = "linux", target_os = "android")), unix))]
     if let Some(mac) = socket.mac().ok().flatten() {
         fmt::debug!("Setting source MAC to {}", mac);
 

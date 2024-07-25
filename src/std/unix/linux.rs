@@ -138,10 +138,10 @@ fn ifreq_ioctl(
 ) -> io::Result<libc::c_int> {
     unsafe {
         #[allow(trivial_casts)]
-        #[cfg(target_env = "musl")]
+        #[cfg(any(target_env = "musl", target_os = "android"))]
         let res = libc::ioctl(lower, cmd as libc::c_int, ifreq as *mut ifreq);
         #[allow(trivial_casts)]
-        #[cfg(not(target_env = "musl"))]
+        #[cfg(not(any(target_env = "musl", target_os = "android")))]
         let res = libc::ioctl(lower, cmd, ifreq as *mut ifreq);
 
         if res == -1 {
